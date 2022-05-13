@@ -12,8 +12,7 @@ namespace Tsukie.Sample.Plugin
         public MyPlugin(ISoraService service,PluginConfiguration configuration,ILogger<MyPlugin> logger) : base(service,configuration,logger)
         {
         }
-
-
+        public new static string PluginId => "f2cb8a08-9e97-4622-98e1-4c64613f9acf";
         public new static string PluginName => "插件示例";
         public new static string PluginDescription => "此为示例插件";
         public new static string PluginVersion => "0.0.0.0";

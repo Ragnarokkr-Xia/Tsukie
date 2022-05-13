@@ -9,7 +9,7 @@ namespace Tsukie.Integration.Models
     {
         private bool _disposed;
         #region Plugin information
-
+        public static string PluginId => string.Empty;
         public static string PluginName => string.Empty;
         public static string PluginDescription => string.Empty;
         public static string PluginVersion => string.Empty;
@@ -18,6 +18,8 @@ namespace Tsukie.Integration.Models
         public static bool PluginNewVersionPublished => false;
         public static string PluginNewVersionWebPageUrl => string.Empty;
         #endregion
+
+        public string Test = "I'm base";
 
         protected Plugin(ISoraService service,PluginConfiguration configuration, ILogger logger)
         {
