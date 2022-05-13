@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Tsukie.Backend.Models;
+using Tsukie.Backend.Models.Exceptions;
 using Tsukie.Backend.Models.Plugin;
 using Tsukie.Integration.Models;
 
@@ -17,6 +18,10 @@ namespace Tsukie.Backend.Utilities
 
         public IEnumerable<PluginInfo>? Cache { get; set; }
 
+        public void Reload()
+        {
+            ListPluginInfo(true);
+        }
         public IEnumerable<PluginInfo> ListPluginInfo(bool reload = false)
         {
             if (reload || Cache == null)
@@ -25,7 +30,7 @@ namespace Tsukie.Backend.Utilities
             }
             return Cache;
         }
-        public IEnumerable<PluginInfo> Discover()
+        private IEnumerable<PluginInfo> Discover()
         {
             List<PluginInfo> results = new List<PluginInfo>();
             if (!Directory.Exists(BaseFolder))
@@ -66,6 +71,17 @@ namespace Tsukie.Backend.Utilities
             return results;
         }
 
+        public PluginInfo FindById(string typeId)
+        {
+            IEnumerable<PluginInfo> pluginInfoList = ListPluginInfo();
+            PluginInfo? result = pluginInfoList.FirstOrDefault(t => t.Id.Equals(typeId, StringComparison.InvariantCultureIgnoreCase));
+            if (result == null)
+            {
+                throw new PluginTypeNotFoundException();
+            }
+
+            return result;
+        }
         public string? GetPluginId(Type t) => (string?)t.GetProperty(nameof(Plugin.PluginId), BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
         public string? GetPluginName(Type t) => (string?)t.GetProperty(nameof(Plugin.PluginName), BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
         public string? GetPluginDescription(Type t) => (string?)t.GetProperty(nameof(Plugin.PluginDescription), BindingFlags.Public | BindingFlags.Static)?.GetValue(null);

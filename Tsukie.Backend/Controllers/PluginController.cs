@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Tsukie.Backend.Models;
+using Tsukie.Backend.Models.Exceptions;
 using Tsukie.Backend.Models.Plugin;
+using Tsukie.Backend.Models.Responses;
 using Tsukie.Backend.Utilities;
 using Tsukie.Integration.Models;
 
@@ -24,7 +26,17 @@ namespace Tsukie.Backend.Controllers
         [HttpGet]
         public IActionResult Reload()
         {
-            PluginUtility.ListPluginInfo(true);
+            ResponseBase response = new ResponseBase();
+            try
+            {
+                PluginUtility.ListPluginInfo(true);
+            }
+            catch (Exception ex)
+            {
+                response.FillByException(new GeneralException(string.Empty, ex));
+                return Ok(response);
+            }
+            
             return Ok();
         }
 
@@ -32,6 +44,7 @@ namespace Tsukie.Backend.Controllers
         [HttpGet]
         public IActionResult ListPlugins()
         {
+            ResponseBase response = new ResponseBase();
             IEnumerable<PluginInfo> pluginInfoList = PluginUtility.ListPluginInfo();
             IEnumerable<object> result = pluginInfoList.Select(t =>
             {
@@ -47,13 +60,15 @@ namespace Tsukie.Backend.Controllers
                     AuthorName = pluginAuthorName,
                 };
             });
-            return Ok(result);
+            response.Result = result;
+            return Ok(response);
         }
 
         [Route("{pluginId}")]
         [HttpGet]
         public IActionResult Read(string pluginId)
         {
+            ResponseBase response = new ResponseBase();
             IEnumerable<PluginInfo> pluginInfoList = PluginUtility.ListPluginInfo();
             PluginInfo? targetPluginInfo = pluginInfoList.FirstOrDefault(t =>
                 t.Id.Equals(pluginId.Trim(), StringComparison.InvariantCultureIgnoreCase));
@@ -75,7 +90,8 @@ namespace Tsukie.Backend.Controllers
                 NewVersionPublished = PluginUtility.GetPluginNewVersionPublished(targetPluginInfo.Type),
                 NewVersionWebPageUrl =PluginUtility.GetPluginNewVersionWebPageUrl(targetPluginInfo.Type)
             };
-            return Ok(result);
+            response.Result = result;
+            return Ok(response);
         }
     }
 }

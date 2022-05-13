@@ -14,11 +14,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddLog4Net();
 
 // Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton(t =>
 {
     ILogger<PluginUtility>? logger = t.GetService<ILogger<PluginUtility>>();
@@ -35,6 +30,12 @@ builder.Services.AddSingleton(t =>
     PluginInstanceManager singleton = new PluginInstanceManager(logger);
     return singleton;
 });
+
+builder.Services.AddControllers();
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -44,11 +45,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

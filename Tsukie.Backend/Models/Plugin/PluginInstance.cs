@@ -2,24 +2,30 @@
 
 namespace Tsukie.Backend.Models.Plugin
 {
-    public class PluginInstance:IDisposable
+    public class PluginInstance:PluginInstanceInfo,IDisposable
     {
         private bool _disposed;
-
-        public PluginInstanceInfo? Info { get; set; } = new PluginInstanceInfo();
-
         public Integration.Models.Plugin? HostPlugin { get; set; }
-
         public ISoraService? SoraService { get; set; }
-
-        public void Stop()
+        public PluginInstanceStatus Status { get; private set; } = PluginInstanceStatus.Stopped;
+        public async Task StopAsync()
         {
-            SoraService?.StopService();
+            if (Status == PluginInstanceStatus.Running && SoraService != null)
+            {
+                await SoraService.StopService();
+                Status = PluginInstanceStatus.Stopped;
+            }
+            
         }
 
-        public void Start()
+        public async Task StartAsync()
         {
-            SoraService?.StartService();
+            if (Status == PluginInstanceStatus.Stopped && SoraService != null)
+            {
+                await SoraService.StartService();
+                Status = PluginInstanceStatus.Running;
+            }
+            
         }
 
         protected virtual void Dispose(bool disposing)
@@ -31,8 +37,6 @@ namespace Tsukie.Backend.Models.Plugin
                     SoraService?.Dispose();
                     HostPlugin?.Dispose();
                 }
-
-                Info = null;
                 _disposed = true;
             }
         }
