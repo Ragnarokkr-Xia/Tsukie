@@ -7,6 +7,8 @@ namespace Tsukie.Sample.Plugin
 {
     public class MyPlugin:Integration.Models.Plugin
     {
+        private bool _disposed;
+
         public MyPlugin(ISoraService service,PluginConfiguration configuration,ILogger<MyPlugin> logger) : base(service,configuration,logger)
         {
         }
@@ -19,5 +21,24 @@ namespace Tsukie.Sample.Plugin
         public new static string PluginWebPageUrl => @"about://blank";
         public new static bool PluginNewVersionPublished => false;
         public new static string PluginNewVersionWebPageUrl => @"about://blank";
+
+        protected override void Dispose(bool disposing)
+        {
+            // Don't dispose more than once.
+            if (_disposed)
+                return;
+            if (disposing)
+            {
+                // Free managed resources here.
+            }
+            // Free unmanaged resources here.
+
+            // Dispose resources in base class
+            // The base class will call GC.SuppressFinalize()
+            base.Dispose(disposing);
+
+            // Set derived class disposed flag:
+            _disposed = true;
+        }
     }
 }
