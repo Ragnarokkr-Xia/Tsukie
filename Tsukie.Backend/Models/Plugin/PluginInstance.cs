@@ -4,9 +4,11 @@ using System.Text.Json.Serialization;
 using Sora;
 using Sora.Interfaces;
 using Sora.Net.Config;
+using Sora.Util;
 using Tsukie.Backend.Global;
 using Tsukie.Integration.Interfaces;
 using Tsukie.Integration.Models.Configuration;
+using YukariToolBox.LightLog;
 
 namespace Tsukie.Backend.Models.Plugin
 {
@@ -17,7 +19,8 @@ namespace Tsukie.Backend.Models.Plugin
         public object HostPlugin { get; set; }
         [JsonIgnore]
         public ISoraService SoraService { get; set; }
-        
+        [JsonIgnore]
+        public ILogger HostLogger { get; set; }
 
         public static PluginInstance Create(PluginInstanceInfo info,ILoggerFactory loggerFactory)
         {
@@ -28,6 +31,7 @@ namespace Tsukie.Backend.Models.Plugin
                 TypeId = info.TypeId,
                 Type = info.Type,
                 Name = info.Name,
+                HostLogger = logger,
                 CqServerAddress = info.CqServerAddress,
                 CqServerPort = info.CqServerPort,
                 ConfigurationFilePath = $"{Constants.CONFIG_FOLDER_NAME}{Path.DirectorySeparatorChar}{info.Id}.config.json"
@@ -68,7 +72,10 @@ namespace Tsukie.Backend.Models.Plugin
             if (Status == PluginInstanceStatus.Stopped && SoraService != null)
             {
                 (HostPlugin as IStartStop)?.Start();
-                await SoraService.StartService();
+                await SoraService.StartService().RunCatch(e =>
+                {
+                    HostLogger.LogError(e, "Error in SoraService");
+                });
                 Status = PluginInstanceStatus.Running;
             }
             
