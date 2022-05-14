@@ -1,4 +1,5 @@
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Sora;
 using Sora.Interfaces;
 using Sora.Net.Config;
@@ -16,7 +17,7 @@ builder.Logging.AddLog4Net();
 // Add services to the container.
 builder.Services.AddSingleton(t =>
 {
-    ILogger<PluginUtility>? logger = t.GetService<ILogger<PluginUtility>>();
+    ILogger<PluginUtility> logger = t.GetService<ILogger<PluginUtility>>();
     PluginUtility singleton = new PluginUtility(logger)
     {
         BaseFolder = Constants.PLUGIN_FOLDER_NAME
@@ -26,8 +27,9 @@ builder.Services.AddSingleton(t =>
 
 builder.Services.AddSingleton(t =>
 {
-    ILogger<PluginInstanceManager>? logger = t.GetService<ILogger<PluginInstanceManager>>();
-    PluginInstanceManager singleton = new PluginInstanceManager(logger);
+    ILogger<PluginInstanceManager> logger = t.GetService<ILogger<PluginInstanceManager>>();
+    ILoggerFactory loggerFactory = t.GetService<ILoggerFactory>();
+    PluginInstanceManager singleton = new PluginInstanceManager(logger, loggerFactory);
     return singleton;
 });
 
@@ -35,6 +37,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddMvc().AddJsonOptions(opts =>
+{
+    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 var app = builder.Build();
 

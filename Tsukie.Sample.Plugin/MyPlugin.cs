@@ -1,17 +1,24 @@
 ﻿
 using Microsoft.Extensions.Logging;
 using Sora.Interfaces;
+using Tsukie.Integration.Interfaces;
 using Tsukie.Integration.Models.Configuration;
 
 namespace Tsukie.Sample.Plugin
 {
-    public class MyPlugin:Integration.Models.Plugin
+    public class MyPlugin:Integration.Models.Plugin,IStartStop,IDisposable
     {
         private bool _disposed;
 
-        public MyPlugin(ISoraService service,PluginConfiguration configuration,ILogger<MyPlugin> logger) : base(service,configuration,logger)
+        public MyPlugin(ISoraService service,PluginConfiguration configuration, ILogger logger) : base(service,configuration,logger)
         {
+            service.Event.OnPrivateMessage += (type, args) =>
+            {
+                args.Repeat();
+                return ValueTask.CompletedTask;
+            };
         }
+
         public new static string PluginId => "f2cb8a08-9e97-4622-98e1-4c64613f9acf";
         public new static string PluginName => "插件示例";
         public new static string PluginDescription => "此为示例插件";
@@ -20,24 +27,20 @@ namespace Tsukie.Sample.Plugin
         public new static string PluginWebPageUrl => @"about://blank";
         public new static bool PluginNewVersionPublished => false;
         public new static string PluginNewVersionWebPageUrl => @"about://blank";
-
-        protected override void Dispose(bool disposing)
+        public void Start()
         {
-            // Don't dispose more than once.
-            if (_disposed)
-                return;
-            if (disposing)
-            {
-                // Free managed resources here.
-            }
-            // Free unmanaged resources here.
+            
+        }
 
-            // Dispose resources in base class
-            // The base class will call GC.SuppressFinalize()
-            base.Dispose(disposing);
+        public void Stop()
+        {
+            
+        }
 
-            // Set derived class disposed flag:
-            _disposed = true;
+
+        public void Dispose()
+        {
+            
         }
     }
 }

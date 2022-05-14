@@ -2,6 +2,6 @@
 {
     internal class PluginInternalConfiguration
     {
-        public IEnumerable<string>? AccessDescriptors { get; set; }
+        public IEnumerable<string> AccessDescriptors { get; set; }
     }
 }

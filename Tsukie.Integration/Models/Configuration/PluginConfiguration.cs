@@ -13,7 +13,7 @@ namespace Tsukie.Integration.Models.Configuration
         private ConfigurationManager GetConfigurationManagerInstance(string configPath)
         {
             ConfigurationManager instance = new ConfigurationManager();
-            string? assemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string assemblyDirectoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (!string.IsNullOrEmpty(assemblyDirectoryName))
             {
                 instance.SetBasePath(assemblyDirectoryName);
@@ -22,7 +22,7 @@ namespace Tsukie.Integration.Models.Configuration
             return instance;
         }
 
-        public IEnumerable<string>? AccessDescriptors =>
+        public IEnumerable<string> AccessDescriptors =>
             ConfigurationManager.Get<PluginInternalConfiguration>().AccessDescriptors;
         public ConfigurationManager ConfigurationManager { get; }
     }

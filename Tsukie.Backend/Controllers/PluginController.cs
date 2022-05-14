@@ -1,11 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Tsukie.Backend.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Tsukie.Backend.Models.Exceptions;
 using Tsukie.Backend.Models.Plugin;
 using Tsukie.Backend.Models.Responses;
 using Tsukie.Backend.Utilities;
-using Tsukie.Integration.Models;
 
 namespace Tsukie.Backend.Controllers
 {
@@ -48,10 +45,10 @@ namespace Tsukie.Backend.Controllers
             IEnumerable<PluginInfo> pluginInfoList = PluginUtility.ListPluginInfo();
             IEnumerable<object> result = pluginInfoList.Select(t =>
             {
-                string? pluginId = t.Id;
-                string? pluginName = PluginUtility.GetPluginName(t.Type);
-                string? pluginVersion = PluginUtility.GetPluginVersion(t.Type);
-                string? pluginAuthorName = PluginUtility.GetPluginAuthorName(t.Type);
+                string pluginId = t.Id;
+                string pluginName = PluginUtility.GetPluginName(t.Type);
+                string pluginVersion = PluginUtility.GetPluginVersion(t.Type);
+                string pluginAuthorName = PluginUtility.GetPluginAuthorName(t.Type);
                 return new
                 {
                     Id = pluginId,
@@ -70,7 +67,7 @@ namespace Tsukie.Backend.Controllers
         {
             ResponseBase response = new ResponseBase();
             IEnumerable<PluginInfo> pluginInfoList = PluginUtility.ListPluginInfo();
-            PluginInfo? targetPluginInfo = pluginInfoList.FirstOrDefault(t =>
+            PluginInfo targetPluginInfo = pluginInfoList.FirstOrDefault(t =>
                 t.Id.Equals(pluginId.Trim(), StringComparison.InvariantCultureIgnoreCase));
             if (targetPluginInfo == null)
             {

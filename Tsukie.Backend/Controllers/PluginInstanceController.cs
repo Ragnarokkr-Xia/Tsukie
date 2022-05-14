@@ -4,6 +4,7 @@ using Tsukie.Backend.Models.Exceptions;
 using Tsukie.Backend.Models.Plugin;
 using Tsukie.Backend.Models.Requests;
 using Tsukie.Backend.Models.Responses;
+using Tsukie.Backend.Utilities;
 
 namespace Tsukie.Backend.Controllers
 {
@@ -11,13 +12,15 @@ namespace Tsukie.Backend.Controllers
     [ApiController]
     public class PluginInstanceController : ControllerBase
     {
+        private PluginUtility PluginUtility { get; }
         private PluginInstanceManager InstanceManager { get; }
 
         private ILogger<PluginInstanceController> Logger { get; }
 
-        public PluginInstanceController(PluginInstanceManager instanceManager, ILogger<PluginInstanceController> logger)
+        public PluginInstanceController(PluginInstanceManager instanceManager,PluginUtility pluginUtility, ILogger<PluginInstanceController> logger)
         {
             InstanceManager = instanceManager;
+            PluginUtility = pluginUtility;
             Logger = logger;
         }
         [Route("")]
@@ -28,9 +31,13 @@ namespace Tsukie.Backend.Controllers
             PluginInstanceInfo info = new PluginInstanceInfo()
             {
                 TypeId = request.TypeId,
-                Name = request.Name
+                Type = PluginUtility.FindById(request.TypeId).Type,
+                Name = request.Name,
+                CqServerAddress = request.CqServerAddress,
+                CqServerPort = request.CqServerPort
             };
-            InstanceManager.Create(info);
+            PluginInstance instance = InstanceManager.Create(info);
+            response.Result = instance.Id;
             return Ok(response);
         }
         [Route("")]
