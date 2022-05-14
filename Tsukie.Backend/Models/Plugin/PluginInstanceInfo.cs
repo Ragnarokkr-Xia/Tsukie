@@ -7,7 +7,7 @@ namespace Tsukie.Backend.Models.Plugin
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Name { get; set; } = string.Empty;
-        public PluginInstanceStatus Status { get; internal set; } = PluginInstanceStatus.Stopped;
+        public PluginInstanceStatus Status { get; set; } = PluginInstanceStatus.Stopped;
         [JsonIgnore]
         public Type Type { get; set; }
         public string TypeId { get; set; } = string.Empty;

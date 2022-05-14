@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Text;
+using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Tsukie.Backend.Global;
 using Tsukie.Backend.Models.Exceptions;
 using Tsukie.Backend.Models.Plugin;
 using Tsukie.Backend.Models.Requests;
@@ -22,6 +25,18 @@ namespace Tsukie.Backend.Controllers
             InstanceManager = instanceManager;
             PluginUtility = pluginUtility;
             Logger = logger;
+        }
+
+        [Route("save")]
+        [HttpGet]
+        public IActionResult Save()
+        {
+            ResponseBase response = new ResponseBase();
+            string pluginInstanceRecordsPath =
+                $"{Constants.CONFIG_FOLDER_NAME}{Path.DirectorySeparatorChar}{Constants.CONFIG_PLUGIN_INSTANCE_RECORDS_FILE_NAME}";
+            string content = JsonSerializer.Serialize(InstanceManager.PluginInstanceList.Select(t => (PluginInstanceInfo) t));
+            System.IO.File.WriteAllText(pluginInstanceRecordsPath,content,Encoding.UTF8);
+            return Ok(response);
         }
         [Route("")]
         [HttpPost]

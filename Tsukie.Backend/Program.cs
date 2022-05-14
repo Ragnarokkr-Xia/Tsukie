@@ -1,6 +1,8 @@
 using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Sora;
+using Sora.EventArgs.SoraEvent;
 using Sora.Interfaces;
 using Sora.Net.Config;
 using Sora.OnebotAdapter;
@@ -44,7 +46,6 @@ builder.Services.AddMvc().AddJsonOptions(opts =>
 });
 
 var app = builder.Build();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -55,4 +56,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+PluginUtility pluginUtility = (PluginUtility)app.Services.GetService(typeof(PluginUtility));
+PluginInstanceManager pluginInstanceManager = (PluginInstanceManager)app.Services.GetService(typeof(PluginInstanceManager));
+await Initializer.RestorePluginInstancesAsync(pluginUtility, pluginInstanceManager);
+
 app.Run();
+

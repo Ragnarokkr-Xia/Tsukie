@@ -30,22 +30,23 @@ namespace Tsukie.Backend.Models.Plugin
                 Name = info.Name,
                 CqServerAddress = info.CqServerAddress,
                 CqServerPort = info.CqServerPort,
-                ConfigurationFilePath = Path.GetFullPath($"{Constants.CONFIG_FOLDER_NAME}{Path.DirectorySeparatorChar}{info.Id}.json")
+                ConfigurationFilePath = $"{Constants.CONFIG_FOLDER_NAME}{Path.DirectorySeparatorChar}{info.Id}.config.json"
             };
+            string absoluteConfigurationFilePath = Path.GetFullPath(result.ConfigurationFilePath);
             ClientConfig serviceConfig = new ClientConfig()
             {
                 Host = info.CqServerAddress,
                 Port = info.CqServerPort
             };
             ISoraService service = SoraServiceFactory.CreateService(serviceConfig);
-            if (!File.Exists(result.ConfigurationFilePath))
+            if (!File.Exists(absoluteConfigurationFilePath))
             {
-                using (Stream fs = File.Create(result.ConfigurationFilePath))
+                using (Stream fs = File.Create(absoluteConfigurationFilePath))
                 {
                     fs.Write(Encoding.UTF8.GetBytes("{}"));
                 }
             }
-            PluginConfiguration pluginConfiguration = new PluginConfiguration(result.ConfigurationFilePath);
+            PluginConfiguration pluginConfiguration = new PluginConfiguration(absoluteConfigurationFilePath);
             result.SoraService = service;
             result.HostPlugin = Activator.CreateInstance(info.Type, service, pluginConfiguration, logger);
             return result;
