@@ -1,6 +1,6 @@
 ﻿namespace Tsukie.Integration.Models.Access
 {
-    internal enum AccessType
+    public enum AccessType
     {
         Allowed,Denied,Unknown
     }

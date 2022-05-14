@@ -18,7 +18,7 @@ namespace Tsukie.Integration.Models.Configuration
             {
                 instance.SetBasePath(assemblyDirectoryName);
             }
-            instance.AddJsonFile(configPath);
+            instance.AddJsonFile(configPath,true,true);
             return instance;
         }
 

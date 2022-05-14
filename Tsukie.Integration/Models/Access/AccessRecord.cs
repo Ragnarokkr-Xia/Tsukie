@@ -1,9 +1,9 @@
 ﻿namespace Tsukie.Integration.Models.Access
 {
-    internal class AccessRecord
+    public class AccessRecord
     {
-        internal AccessTarget Target { get; set; } = new AccessTarget();
-        internal AccessTargetType TargetType { get; set; }
-        internal AccessType Type { get; set; } = AccessType.Denied;
+        public AccessTarget Target { get; set; } = new AccessTarget();
+        public AccessTargetType TargetType { get; set; }
+        public AccessType Type { get; set; } = AccessType.Denied;
     }
 }

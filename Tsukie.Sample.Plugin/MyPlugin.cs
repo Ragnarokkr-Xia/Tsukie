@@ -1,4 +1,5 @@
 ﻿
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Sora.Interfaces;
 using Tsukie.Integration.Interfaces;
@@ -14,10 +15,28 @@ namespace Tsukie.Sample.Plugin
         {
             service.Event.OnPrivateMessage += (type, args) =>
             {
+                bool valid = PluginMessageFilter.FilterMessageByAccountId(args.SenderInfo.UserId.ToString());
+                logger.LogInformation(JsonSerializer.Serialize(PluginMessageFilter.GetAccessRecordList()));
+                logger.LogInformation(JsonSerializer.Serialize(PluginConfiguration.AccessDescriptors));
+                logger.LogInformation(args.SenderInfo.UserId.ToString());
+                logger.LogInformation($"Valid:{valid}");
+                if (valid)
+                {
+                    args.Repeat();
+                }
                 return ValueTask.CompletedTask;
             };
             service.Event.OnGroupMessage +=(type, args) =>
             {
+                bool valid = PluginMessageFilter.FilterMessageByGroupId(args.SourceGroup.Id.ToString());
+                logger.LogInformation(JsonSerializer.Serialize(PluginMessageFilter.GetAccessRecordList()));
+                logger.LogInformation(JsonSerializer.Serialize(PluginConfiguration.AccessDescriptors));
+                logger.LogInformation(args.SenderInfo.UserId.ToString());
+                logger.LogInformation($"Valid:{valid}");
+                if (valid)
+                {
+                    args.Repeat();
+                }
                 return ValueTask.CompletedTask;
             };
         }

@@ -1,6 +1,6 @@
 ﻿namespace Tsukie.Integration.Models.Access
 {
-    internal enum AccessTargetType
+    public enum AccessTargetType
     {
         Account,Group,AccountInGroup,Unknown
     }

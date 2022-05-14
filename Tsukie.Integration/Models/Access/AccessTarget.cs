@@ -1,8 +1,8 @@
 ﻿namespace Tsukie.Integration.Models.Access
 {
-    internal class AccessTarget
+    public class AccessTarget
     {
-        internal string GroupId { get; set; } = String.Empty;
-        internal string AccountId { get; set; } = string.Empty;
+        public string GroupId { get; set; } = String.Empty;
+        public string AccountId { get; set; } = string.Empty;
     }
 }

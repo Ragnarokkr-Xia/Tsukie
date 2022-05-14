@@ -4,7 +4,6 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
-    <DebugType>none</DebugType>
 	  <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>Ragnarokkr.Xia</Authors>
   </PropertyGroup>

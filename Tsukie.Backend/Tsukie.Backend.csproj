@@ -11,15 +11,11 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="6.1.0" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
 		<PackageReference Include="Sora" Version="1.0.0-rc.51" />
+		<PackageReference Include="Tsukie.Integration" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Plugins\" />
 	  <Folder Include="Configs\" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Tsukie.Integration\Tsukie.Integration.csproj" />
-	  <ProjectReference Include="..\Tsukie.Sample.Plugin\Tsukie.Sample.Plugin.csproj" />
 	</ItemGroup>
 </Project>

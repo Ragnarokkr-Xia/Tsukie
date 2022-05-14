@@ -2,7 +2,7 @@
 
 namespace Tsukie.Integration.Utilities
 {
-    internal class AccessDescriptorAnalyzer
+    public class AccessDescriptorAnalyzer
     {
         public static bool TryAnalyze(string descriptor,out AccessRecord record)
         {
@@ -41,7 +41,7 @@ namespace Tsukie.Integration.Utilities
             content = content.Trim();
             target = new AccessTarget();
             type = AccessTargetType.Unknown;
-            if (content.IndexOf(AccessDescriptorConstants.DEPENDENCE_SPLITTER) < -1)
+            if (content.IndexOf(AccessDescriptorConstants.DEPENDENCE_SPLITTER) < 0)
             {
                 type = AccessTargetType.Account;
                 if (TryAnalyzeAccountTypedAccessTarget(content, out AccessTarget targetResult))
@@ -69,24 +69,25 @@ namespace Tsukie.Integration.Utilities
             target = new AccessTarget();
             type = AccessTargetType.Unknown;
             string[] split = content.Split(AccessDescriptorConstants.DEPENDENCE_SPLITTER);
-            if (split.Length == 2)
+            if (split.Length != 2)
             {
-                string group = split[0].Trim();
-                string account = split[1].Trim();
-                if (string.IsNullOrWhiteSpace(group) || string.IsNullOrWhiteSpace(account))
-                {
-                    return false;
-                }
-                type = account.Equals(AccessDescriptorConstants.WILDCARD_ALL.ToString(),
-                    StringComparison.InvariantCultureIgnoreCase) ? 
-                    AccessTargetType.Group : 
-                    AccessTargetType.AccountInGroup;
-
-                target.GroupId = group;
-                target.AccountId = account;
+                return false;
             }
+            string group = split[0].Trim();
+            string account = split[1].Trim();
+            if (string.IsNullOrWhiteSpace(@group) || string.IsNullOrWhiteSpace(account))
+            {
+                return false;
+            }
+            type = account.Equals(AccessDescriptorConstants.WILDCARD_ALL.ToString(),
+                StringComparison.InvariantCultureIgnoreCase) ? 
+                AccessTargetType.Group : 
+                AccessTargetType.AccountInGroup;
 
-            return false;
+            target.GroupId = @group;
+            target.AccountId = account;
+            return true;
+
         }
         private static bool TryAnalyzeAccountTypedAccessTarget(string content, out AccessTarget target)
         {

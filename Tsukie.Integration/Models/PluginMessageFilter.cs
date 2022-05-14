@@ -18,7 +18,7 @@ namespace Tsukie.Integration.Models
 
         private PluginConfiguration PluginConfiguration { get; }
 
-        private List<AccessRecord> GetAccessRecordList()
+        public List<AccessRecord> GetAccessRecordList()
         {
             IEnumerable<string> descriptors = PluginConfiguration.AccessDescriptors;
             if (descriptors == null)

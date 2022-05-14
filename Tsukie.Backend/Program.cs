@@ -1,17 +1,6 @@
-using System.Reflection;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using Sora;
-using Sora.EventArgs.SoraEvent;
-using Sora.Interfaces;
-using Sora.Net.Config;
-using Sora.OnebotAdapter;
 using Tsukie.Backend.Global;
-using Tsukie.Backend.Models.Plugin;
 using Tsukie.Backend.Utilities;
-using Tsukie.Integration.Models;
-using Tsukie.Integration.Models.Configuration;
-using Tsukie.Sample.Plugin;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddLog4Net();
@@ -53,7 +42,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
