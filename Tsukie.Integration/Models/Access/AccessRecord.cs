@@ -4,6 +4,6 @@
     {
         internal AccessTarget Target { get; set; } = new AccessTarget();
         internal AccessTargetType TargetType { get; set; }
-        internal Access Access { get; set; } = Access.Denied;
+        internal AccessType Type { get; set; } = AccessType.Denied;
     }
 }

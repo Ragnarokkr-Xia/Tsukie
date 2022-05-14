@@ -14,7 +14,10 @@ namespace Tsukie.Sample.Plugin
         {
             service.Event.OnPrivateMessage += (type, args) =>
             {
-                args.Repeat();
+                return ValueTask.CompletedTask;
+            };
+            service.Event.OnGroupMessage +=(type, args) =>
+            {
                 return ValueTask.CompletedTask;
             };
         }
@@ -27,18 +30,18 @@ namespace Tsukie.Sample.Plugin
         public new static string PluginWebPageUrl => @"about://blank";
         public new static bool PluginNewVersionPublished => false;
         public new static string PluginNewVersionWebPageUrl => @"about://blank";
-        public void Start()
+        void IStartStop.Start()
         {
             
         }
 
-        public void Stop()
+        void IStartStop.Stop()
         {
             
         }
 
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             
         }

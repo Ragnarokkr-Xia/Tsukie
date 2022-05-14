@@ -14,9 +14,9 @@ namespace Tsukie.Integration.Utilities
                 return false;
             }
 
-            if (TryAnalyzeAccess(split[0],out Access access))
+            if (TryAnalyzeAccess(split[0],out AccessType access))
             {
-                record.Access = access;
+                record.Type = access;
             }
             else
             {
@@ -100,21 +100,21 @@ namespace Tsukie.Integration.Utilities
             return true;
         }
 
-        private static bool TryAnalyzeAccess(string content,out Access access)
+        private static bool TryAnalyzeAccess(string content,out AccessType accessType)
         {
             content = content.Trim();
             if (content.Equals(AccessDescriptorConstants.ALLOW_PREFIX, StringComparison.InvariantCultureIgnoreCase))
             {
-                access = Access.Allowed;
+                accessType = AccessType.Allowed;
                 return true;
             }
             if (content.Equals(AccessDescriptorConstants.DENY_PREFIX, StringComparison.InvariantCultureIgnoreCase))
             {
-                access = Access.Denied;
+                accessType = AccessType.Denied;
                 return true;
             }
 
-            access = Access.Unknown;
+            accessType = AccessType.Unknown;
             return false;
         }
     }
